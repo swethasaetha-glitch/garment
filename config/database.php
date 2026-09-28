@@ -17,7 +17,10 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => (env('DB_CONNECTION', 'sqlite') === 'mysql' && !env('DB_PASSWORD') && file_exists(database_path('database.sqlite')))
+        ? 'sqlite'
+        : env('DB_CONNECTION', 'sqlite'),
+
 
     /*
     |--------------------------------------------------------------------------

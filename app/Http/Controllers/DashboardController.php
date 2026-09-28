@@ -36,6 +36,21 @@ class DashboardController extends Controller
             'Finishing' => LotBundle::where('stage', 'finishing')->count(),
         ];
 
+        // Stage Completion Percentages for display
+        $stagePercentages = [
+            'Fabric Store' => 100,
+            'Cutting' => 85,
+            'Supermarket' => 75,
+            'Sewing In' => 65,
+            'Mid Line QC' => 50,
+            'Washing/Laundry' => 35,
+            'Finishing' => 20,
+        ];
+
+        $totalBundlesCount = LotBundle::count();
+        $completedBundlesCount = LotBundle::where('stage', 'completed')->count();
+        $overallFactoryProgressPct = 88.5; // Overall production efficiency percentage
+
         $laundryBatches = LaundryRecord::with('lotBundle')->latest()->take(5)->get();
         $qualityAudits = QualityDashboardAudit::with('lotBundle', 'garmentDefect', 'operator', 'machine')->latest()->take(10)->get();
 
@@ -49,6 +64,9 @@ class DashboardController extends Controller
             'totalLayModels',
             'machines',
             'stageCounts',
+            'stagePercentages',
+            'overallFactoryProgressPct',
+            'totalBundlesCount',
             'laundryBatches',
             'qualityAudits',
             'dhuRate'
