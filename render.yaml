@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: garment
+    env: docker
+    plan: free
+    envVars:
+      - key: APP_KEY
+        value: base64:2PcJQpPqAewUKryQ0AWxpQlexLodScznqcwrZjEY5tw=
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: DB_CONNECTION
+        value: sqlite
+      - key: SESSION_DRIVER
+        value: file
+      - key: CACHE_STORE
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: LOG_CHANNEL
+        value: stderr
