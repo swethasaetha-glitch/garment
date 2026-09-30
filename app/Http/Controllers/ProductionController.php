@@ -14,6 +14,7 @@ use App\Models\Fabric;
 use App\Models\SewingMachineScan;
 use App\Models\GarmentDefect;
 use App\Models\QualityDashboardAudit;
+use App\Models\LaundryRecord;
 use Illuminate\Http\Request;
 
 class ProductionController extends Controller
@@ -215,7 +216,6 @@ class ProductionController extends Controller
             'end_line' => 'out_scan',
         };
 
-        // Record scan log
         SewingMachineScan::create([
             'lot_bundle_id' => $bundle->id,
             'machine_id' => $validated['machine_id'] ?? null,
@@ -225,7 +225,6 @@ class ProductionController extends Controller
             'scanned_at' => now(),
         ]);
 
-        // Update bundle stage
         $newStage = match($validated['scan_stage']) {
             'in_line' => 'sew_in',
             'mid_line' => 'mid_line',
@@ -233,7 +232,6 @@ class ProductionController extends Controller
         };
         $bundle->update(['stage' => $newStage]);
 
-        // Record quality audit log
         QualityDashboardAudit::create([
             'lot_bundle_id' => $bundle->id,
             'garment_defect_id' => $validated['garment_defect_id'] ?? null,
@@ -252,6 +250,33 @@ class ProductionController extends Controller
     public function quality()
     {
         return view('production.quality');
+    }
+
+    public function washing()
+    {
+        $laundryRecords = LaundryRecord::with('lotBundle')->latest()->get();
+        $bundles = LotBundle::all();
+        return view('production.washing', compact('laundryRecords', 'bundles'));
+    }
+
+    public function storeWashing(Request $request)
+    {
+        $validated = $request->validate([
+            'wash_batch_no' => 'required|string|max:100|unique:laundry_records,wash_batch_no',
+            'lot_bundle_id' => 'required|exists:lot_bundles,id',
+            'wash_type' => 'required|string|max:100',
+            'status' => 'required|string',
+        ]);
+
+        LaundryRecord::create([
+            'wash_batch_no' => $validated['wash_batch_no'],
+            'lot_bundle_id' => $validated['lot_bundle_id'],
+            'wash_type' => $validated['wash_type'],
+            'status' => $validated['status'],
+            'received_at' => now(),
+        ]);
+
+        return redirect()->route('production.washing')->with('success', 'Washing & Laser batch log created successfully!');
     }
 
     public function packing()

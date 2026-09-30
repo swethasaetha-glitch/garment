@@ -3,123 +3,92 @@
 @section('title', 'Fabric Details')
 
 @section('content')
-<div class="mb-4 d-flex justify-content-between align-items-center">
-    <div>
-        <a href="{{ route('fabrics.index') }}" class="text-decoration-none text-muted">
-            <i class="bi bi-arrow-left"></i> Back to Fabrics
-        </a>
-        <h2 class="fw-bold mt-2 mb-0">{{ $fabric->fabric_name }} ({{ $fabric->fabric_code }})</h2>
-    </div>
-    <div class="d-flex gap-2">
-        <a href="{{ route('fabrics.edit', $fabric) }}" class="btn btn-primary">
-            <i class="bi bi-pencil me-1"></i> Edit Fabric
-        </a>
+<div class="top-page-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{{ route('fabrics.index') }}" class="text-decoration-none text-muted small fw-semibold">
+                <i class="bi bi-arrow-left"></i> BACK TO FABRIC STORE
+            </a>
+            <div class="d-flex align-items-center gap-2 mt-1">
+                <h1 class="top-page-header-title mb-0">{{ $fabric->fabric_name }}</h1>
+                <span class="badge-ent badge-ent-slate font-mono-num">{{ $fabric->fabric_code }}</span>
+                @if($fabric->status === 'Active')
+                    <span class="badge-ent badge-ent-emerald">Active</span>
+                @else
+                    <span class="badge-ent badge-ent-rose">Inactive</span>
+                @endif
+            </div>
+            <p class="top-page-header-subtitle mt-1">Fabric SKU specifications and connected fabric groups.</p>
+        </div>
+        <div>
+            <a href="{{ route('fabrics.edit', $fabric) }}" class="btn-ent-primary">
+                <i class="bi bi-pencil"></i> Edit Fabric SKU
+            </a>
+        </div>
     </div>
 </div>
 
 <div class="row g-4">
-    <div class="col-md-8">
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white py-3">
-                <h5 class="fw-bold mb-0"><i class="bi bi-info-circle text-primary me-2"></i> Fabric Details</h5>
+    <div class="col-lg-8">
+        <div class="card-ent mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-info-circle text-primary me-2"></i> Specification Sheet</h6>
             </div>
-            <div class="card-body">
+            <div class="card-ent-body">
                 <div class="row g-3">
                     <div class="col-sm-6">
-                        <span class="text-muted d-block small">Fabric Code</span>
-                        <span class="fw-bold fs-6">{{ $fabric->fabric_code }}</span>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">Fabric Code</span>
+                        <span class="fw-bold font-mono-num text-dark fs-6">{{ $fabric->fabric_code }}</span>
                     </div>
                     <div class="col-sm-6">
-                        <span class="text-muted d-block small">Fabric Name</span>
-                        <span class="fw-bold fs-6">{{ $fabric->fabric_name }}</span>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">Fabric Name</span>
+                        <span class="fw-bold text-dark fs-6">{{ $fabric->fabric_name }}</span>
                     </div>
                     <div class="col-sm-6">
-                        <span class="text-muted d-block small">Type</span>
-                        <span class="badge bg-secondary fs-6">{{ $fabric->fabric_type }}</span>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">Type</span>
+                        <span class="badge-ent badge-ent-blue">{{ $fabric->fabric_type }}</span>
                     </div>
                     <div class="col-sm-6">
-                        <span class="text-muted d-block small">Status</span>
-                        @if($fabric->status === 'Active')
-                            <span class="badge badge-active fs-6">Active</span>
-                        @else
-                            <span class="badge badge-inactive fs-6">Inactive</span>
-                        @endif
-                    </div>
-                    <div class="col-sm-6">
-                        <span class="text-muted d-block small">Composition</span>
-                        <span>{{ $fabric->composition ?: '-' }}</span>
-                    </div>
-                    <div class="col-sm-6">
-                        <span class="text-muted d-block small">Color</span>
-                        <span>{{ $fabric->color ?: '-' }}</span>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">Composition</span>
+                        <span class="text-dark font-mono-num">{{ $fabric->composition ?: '-' }}</span>
                     </div>
                     <div class="col-sm-4">
-                        <span class="text-muted d-block small">GSM</span>
-                        <span>{{ $fabric->gsm ?: '-' }}</span>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">Color / Shade</span>
+                        <span class="text-dark fw-medium">{{ $fabric->color ?: '-' }}</span>
                     </div>
                     <div class="col-sm-4">
-                        <span class="text-muted d-block small">Width</span>
-                        <span>{{ $fabric->width ?: '-' }}</span>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">GSM</span>
+                        <span class="font-mono-num fw-bold text-dark">{{ $fabric->gsm ? $fabric->gsm . ' GSM' : '-' }}</span>
                     </div>
                     <div class="col-sm-4">
-                        <span class="text-muted d-block small">Unit</span>
-                        <span>{{ $fabric->unit ?: '-' }}</span>
-                    </div>
-                    <div class="col-12">
-                        <span class="text-muted d-block small">Description</span>
-                        <p class="mb-0">{{ $fabric->description ?: 'No description provided.' }}</p>
+                        <span class="text-muted d-block fs-7 text-uppercase fw-semibold">Cuttable Width</span>
+                        <span class="font-mono-num fw-bold text-dark">{{ $fabric->width ? $fabric->width . ' Inches' : '-' }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <!-- Groups associated -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white py-3">
-                <h6 class="fw-bold mb-0"><i class="bi bi-collection text-success me-2"></i> Associated Fabric Groups</h6>
+    <div class="col-lg-4">
+        <!-- Associated Fabric Groups -->
+        <div class="card-ent mb-4">
+            <div class="card-header bg-white py-3 border-bottom">
+                <h6 class="fw-bold mb-0 text-dark"><i class="bi bi-collection text-primary me-2"></i> Associated Fabric Groups</h6>
             </div>
-            <div class="card-body p-0">
-                <ul class="list-group list-group-flush">
+            <div class="card-ent-body p-0">
+                <div class="list-group list-group-flush">
                     @forelse($fabric->groups as $group)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <a href="{{ route('fabric-groups.show', $group) }}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-3">
                             <div>
-                                <a href="{{ route('fabric-groups.show', $group) }}" class="fw-bold text-decoration-none text-dark">
-                                    {{ $group->group_name }}
-                                </a>
-                                <div class="small text-muted">{{ $group->group_code }}</div>
+                                <span class="fw-bold text-dark d-block">{{ $group->group_name }}</span>
+                                <span class="font-mono-num text-muted fs-7">{{ $group->group_code }}</span>
                             </div>
-                            <span class="badge bg-light text-dark border">{{ $group->status }}</span>
-                        </li>
+                            <span class="badge-ent badge-ent-slate">{{ $group->status }}</span>
+                        </a>
                     @empty
-                        <li class="list-group-item text-muted text-center py-3">Not assigned to any group</li>
+                        <div class="text-muted text-center py-4 fs-7">Not assigned to any fabric group</div>
                     @endforelse
-                </ul>
-            </div>
-        </div>
-
-        <!-- Lay Models associated -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white py-3">
-                <h6 class="fw-bold mb-0"><i class="bi bi-grid-3x3-gap text-info me-2"></i> Associated Lay Models</h6>
-            </div>
-            <div class="card-body p-0">
-                <ul class="list-group list-group-flush">
-                    @forelse($fabric->layModels as $lay)
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <a href="{{ route('lay-models.show', $lay) }}" class="fw-bold text-decoration-none text-dark">
-                                    {{ $lay->lay_model_name }}
-                                </a>
-                                <div class="small text-muted">{{ $lay->lay_model_code }}</div>
-                            </div>
-                            <span class="badge bg-light text-dark border">{{ $lay->status }}</span>
-                        </li>
-                    @empty
-                        <li class="list-group-item text-muted text-center py-3">Not used in any lay model</li>
-                    @endforelse
-                </ul>
+                </div>
             </div>
         </div>
     </div>

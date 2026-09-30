@@ -74,7 +74,7 @@ return [
     |
     */
 
-    'connection' => env('SESSION_CONNECTION', 'sqlite'),
+    'connection' => env('SESSION_CONNECTION'),
 
 
     /*

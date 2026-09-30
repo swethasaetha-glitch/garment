@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FabricInspection;
 use App\Models\FabricRelaxation;
 use App\Models\FabricRoll;
+use App\Models\FabricRollReservation;
 use Illuminate\Http\Request;
 
 class FabricInspectionController extends Controller
@@ -27,7 +28,6 @@ class FabricInspectionController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
 
-        // Calculate 4-Point System score: (Points * 3600) / (Inspected Yds * Width In Inches)
         $roll = FabricRoll::findOrFail($validated['fabric_roll_id']);
         $pointsPer100Yds = round(($validated['total_penalty_points'] * 3600) / ($validated['inspected_length'] * ($roll->width ?: 72)), 2);
 
@@ -85,5 +85,32 @@ class FabricInspectionController extends Controller
         $roll->update(['relaxation_status' => 'Relaxed']);
 
         return redirect()->back()->with('success', 'Fabric Relaxation log completed! Roll is ready for lay planning.');
+    }
+
+    public function reservationsIndex()
+    {
+        $reservations = FabricRollReservation::with('fabricRoll.fabric')->latest()->get();
+        $passedRolls = FabricRoll::all();
+        return view('fabric_erp.reservations', compact('reservations', 'passedRolls'));
+    }
+
+    public function storeReservation(Request $request)
+    {
+        $validated = $request->validate([
+            'reservation_no' => ['required', 'string', 'max:100', 'unique:fabric_roll_reservations,reservation_no'],
+            'fabric_roll_id' => ['required', 'exists:fabric_rolls,id'],
+            'requested_by_dept' => ['required', 'string', 'max:100'],
+            'storage_location' => ['required', 'string', 'max:100'],
+        ]);
+
+        FabricRollReservation::create([
+            'reservation_no' => $validated['reservation_no'],
+            'fabric_roll_id' => $validated['fabric_roll_id'],
+            'requested_by_dept' => $validated['requested_by_dept'],
+            'storage_location' => $validated['storage_location'],
+            'status' => 'Reserved',
+        ]);
+
+        return redirect()->back()->with('success', 'Fabric Roll Reservation logged successfully!');
     }
 }

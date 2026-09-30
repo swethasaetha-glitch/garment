@@ -52,13 +52,9 @@
                         <i class="bi bi-box-arrow-in-right me-1"></i> Log In
                     </button>
                 </form>
-
-                <div class="text-center mt-4 pt-3 border-top">
-                    <p class="text-muted small mb-0">Don't have an account? <a href="{{ route('register') }}" class="fw-bold text-primary text-decoration-none">Sign Up</a></p>
-                </div>
             </div>
-            <div class="card-footer bg-light border-0 text-center py-2 text-muted small rounded-bottom">
-                Default Credentials: <code>admin@example.com</code> / <code>ChangeMe@123</code>
+            <div class="card-footer bg-light border-0 text-center py-2.5 text-muted small rounded-bottom">
+                System Admin Credentials: <code>admin@example.com</code> / <code>ChangeMe@123</code>
             </div>
         </div>
     </div>

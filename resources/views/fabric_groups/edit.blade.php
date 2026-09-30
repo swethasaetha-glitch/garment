@@ -3,48 +3,53 @@
 @section('title', 'Edit Fabric Group')
 
 @section('content')
-<div class="mb-4">
-    <a href="{{ route('fabric-groups.index') }}" class="text-decoration-none text-muted">
-        <i class="bi bi-arrow-left"></i> Back to Fabric Groups
-    </a>
-    <h2 class="fw-bold mt-2">Edit Fabric Group: {{ $fabricGroup->group_code }}</h2>
+<div class="top-page-header mb-4">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <a href="{{ route('fabric-groups.index') }}" class="text-decoration-none text-muted small fw-semibold">
+                <i class="bi bi-arrow-left"></i> BACK TO FABRIC GROUPS
+            </a>
+            <h1 class="top-page-header-title mt-1">Edit Fabric Group: {{ $fabricGroup->group_code }}</h1>
+            <p class="top-page-header-subtitle">Update group specifications and assigned fabric SKUs.</p>
+        </div>
+    </div>
 </div>
 
-<div class="card border-0 shadow-sm">
-    <div class="card-body p-4">
+<div class="card-ent">
+    <div class="card-ent-body">
         <form action="{{ route('fabric-groups.update', $fabricGroup) }}" method="POST">
             @csrf
             @method('PUT')
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label for="group_code" class="form-label fw-semibold">Group Code <span class="text-danger">*</span></label>
-                    <input type="text" name="group_code" id="group_code" class="form-control @error('group_code') is-invalid @enderror" value="{{ old('group_code', $fabricGroup->group_code) }}" required>
+                    <label for="group_code" class="form-label fw-semibold fs-7 text-dark">Group Code <span class="text-danger">*</span></label>
+                    <input type="text" name="group_code" id="group_code" class="form-control-ent w-100 @error('group_code') is-invalid @enderror" value="{{ old('group_code', $fabricGroup->group_code) }}" required>
                     @error('group_code')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="col-md-6">
-                    <label for="group_name" class="form-label fw-semibold">Group Name <span class="text-danger">*</span></label>
-                    <input type="text" name="group_name" id="group_name" class="form-control @error('group_name') is-invalid @enderror" value="{{ old('group_name', $fabricGroup->group_name) }}" required>
+                    <label for="group_name" class="form-label fw-semibold fs-7 text-dark">Group Name <span class="text-danger">*</span></label>
+                    <input type="text" name="group_name" id="group_name" class="form-control-ent w-100 @error('group_name') is-invalid @enderror" value="{{ old('group_name', $fabricGroup->group_name) }}" required>
                     @error('group_name')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="col-12">
-                    <label for="description" class="form-label fw-semibold">Description</label>
-                    <textarea name="description" id="description" rows="2" class="form-control @error('description') is-invalid @enderror">{{ old('description', $fabricGroup->description) }}</textarea>
+                    <label for="description" class="form-label fw-semibold fs-7 text-dark">Description</label>
+                    <textarea name="description" id="description" rows="2" class="form-control-ent w-100 @error('description') is-invalid @enderror">{{ old('description', $fabricGroup->description) }}</textarea>
                     @error('description')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="col-12">
-                    <label class="form-label fw-semibold">Select Fabrics <span class="text-danger">*</span></label>
-                    <p class="small text-muted mb-2">Check all fabrics that belong to this group (at least 1 required).</p>
-                    <div class="card border bg-light p-3">
-                        <div class="row g-2" style="max-height: 250px; overflow-y: auto;">
+                    <label class="form-label fw-semibold fs-7 text-dark">Assigned Fabrics <span class="text-danger">*</span></label>
+                    <p class="text-muted small mb-2">Check all fabrics that belong to this group (at least 1 required).</p>
+                    <div class="border rounded p-3 bg-light" style="max-height: 280px; overflow-y: auto;">
+                        <div class="row g-2">
                             @forelse($fabrics as $fabric)
                                 @php
                                     $isChecked = is_array(old('fabrics')) 
@@ -52,16 +57,19 @@
                                         : in_array($fabric->id, $selectedFabricIds);
                                 @endphp
                                 <div class="col-md-6 col-lg-4">
-                                    <div class="form-check p-2 bg-white rounded border">
-                                        <input class="form-check-input ms-0 me-2" type="checkbox" name="fabrics[]" value="{{ $fabric->id }}" id="fabric_{{ $fabric->id }}" {{ $isChecked ? 'checked' : '' }}>
-                                        <label class="form-check-label d-block text-truncate" for="fabric_{{ $fabric->id }}">
-                                            <strong>{{ $fabric->fabric_code }}</strong> - {{ $fabric->fabric_name }}
-                                            <span class="badge bg-light text-dark border ms-1">{{ $fabric->gsm ? $fabric->gsm . ' GSM' : $fabric->fabric_type }}</span>
-                                        </label>
+                                    <div class="card-ent p-2.5 bg-white h-100">
+                                        <div class="form-check m-0 d-flex align-items-center gap-2">
+                                            <input class="form-check-input" type="checkbox" name="fabrics[]" value="{{ $fabric->id }}" id="fabric_{{ $fabric->id }}" {{ $isChecked ? 'checked' : '' }}>
+                                            <label class="form-check-label w-100 text-truncate cursor-pointer" for="fabric_{{ $fabric->id }}">
+                                                <span class="fw-bold font-mono-num text-dark">{{ $fabric->fabric_code }}</span>
+                                                <span class="text-muted"> - {{ $fabric->fabric_name }}</span>
+                                                <span class="badge-ent badge-ent-slate ms-1">{{ $fabric->gsm ? $fabric->gsm . ' GSM' : $fabric->fabric_type }}</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             @empty
-                                <div class="col-12 text-center text-muted py-3">
+                                <div class="col-12 text-center text-muted py-4">
                                     No fabrics available.
                                 </div>
                             @endforelse
@@ -73,21 +81,21 @@
                 </div>
 
                 <div class="col-md-6">
-                    <label for="status" class="form-label fw-semibold">Status <span class="text-danger">*</span></label>
-                    <select name="status" id="status" class="form-select @error('status') is-invalid @enderror" required>
+                    <label for="status" class="form-label fw-semibold fs-7 text-dark">Group Status <span class="text-danger">*</span></label>
+                    <select name="status" id="status" class="form-select-ent w-100 @error('status') is-invalid @enderror" required>
                         <option value="Active" {{ old('status', $fabricGroup->status) == 'Active' ? 'selected' : '' }}>Active</option>
                         <option value="Inactive" {{ old('status', $fabricGroup->status) == 'Inactive' ? 'selected' : '' }}>Inactive</option>
                     </select>
                     @error('status')
-                        <div class="invalid-feedback">{{ $message }}</div>
+                        <div class="text-danger small mt-1">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
-            <div class="mt-4 text-end">
-                <a href="{{ route('fabric-groups.index') }}" class="btn btn-light me-2">Cancel</a>
-                <button type="submit" class="btn btn-primary px-4 fw-bold">
-                    <i class="bi bi-check-lg me-1"></i> Update Group
+            <div class="mt-4 pt-3 border-top d-flex justify-content-end gap-2">
+                <a href="{{ route('fabric-groups.index') }}" class="btn-ent-outline">Cancel</a>
+                <button type="submit" class="btn-ent-primary">
+                    <i class="bi bi-check-lg"></i> Update Group
                 </button>
             </div>
         </form>

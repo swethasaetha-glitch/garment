@@ -33,7 +33,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-
     // Stage 1 & 2: Buyer Orders & Sales Orders (ERP Entry)
     Route::get('/buyer-orders', [OrderController::class, 'buyerOrders'])->name('buyer-orders.index');
     Route::post('/buyer-orders', [OrderController::class, 'storeBuyerOrder'])->name('buyer-orders.store');
@@ -50,11 +49,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/fabric-grns', [FabricProcurementController::class, 'grns'])->name('fabric-grns.index');
     Route::post('/fabric-grns', [FabricProcurementController::class, 'storeGrn'])->name('fabric-grns.store');
 
-    // Stage 6 & 7: 4-Point Fabric Inspection & Relaxation
+    // Stage 6 & 7: 4-Point Fabric Inspection, Relaxation & Reservation
     Route::get('/fabric-inspections', [FabricInspectionController::class, 'inspectionIndex'])->name('fabric-inspections.index');
     Route::post('/fabric-inspections', [FabricInspectionController::class, 'storeInspection'])->name('fabric-inspections.store');
     Route::get('/fabric-relaxations', [FabricInspectionController::class, 'relaxationIndex'])->name('fabric-relaxations.index');
     Route::post('/fabric-relaxations', [FabricInspectionController::class, 'storeRelaxation'])->name('fabric-relaxations.store');
+    Route::get('/fabric-reservations', [FabricInspectionController::class, 'reservationsIndex'])->name('fabric-reservations.index');
+    Route::post('/fabric-reservations', [FabricInspectionController::class, 'storeReservation'])->name('fabric-reservations.store');
 
     // Fabric Master & Fabric Groups
     Route::resource('fabrics', FabricController::class);
@@ -77,9 +78,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/production/sewing', [ProductionController::class, 'sewing'])->name('production.sewing');
     Route::post('/production/sewing', [ProductionController::class, 'storeSewingScan'])->name('production.sewing.store');
     Route::get('/production/quality', [ProductionController::class, 'quality'])->name('production.quality');
+    Route::get('/production/washing', [ProductionController::class, 'washing'])->name('production.washing');
+    Route::post('/production/washing', [ProductionController::class, 'storeWashing'])->name('production.washing.store');
     Route::get('/production/packing', [ProductionController::class, 'packing'])->name('production.packing');
-
-
 
     // Garment Masters & Process Sequences
     Route::get('/masters', [\App\Http\Controllers\MasterController::class, 'index'])->name('masters.index');
@@ -97,4 +98,3 @@ Route::middleware('auth')->group(function () {
     // Department-Wise & Machine-Wise Live Dashboard
     Route::get('/department-dashboard', [\App\Http\Controllers\DepartmentDashboardController::class, 'index'])->name('department-dashboard.index');
 });
-
