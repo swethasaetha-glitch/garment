@@ -13,8 +13,9 @@ npm run build
 mkdir -p database
 touch database/database.sqlite
 
-# Run migrations and cache config/routes
+# Run migrations, seed initial data, and cache config/routes
 php artisan migrate --force
+php artisan db:seed --force
 php artisan config:cache
 php artisan route:cache
 php artisan view:cache
