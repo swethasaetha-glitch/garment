@@ -4,12 +4,6 @@
 @section('page_header_title', 'Dashboard')
 @section('page_header_subtitle', 'Factory operations')
 
-@section('top_header_action')
-<a href="{{ route('sales-orders.index') }}" class="btn-ent-primary">
-    <i class="bi bi-plus-lg"></i> + Create Sales Order
-</a>
-@endsection
-
 @section('content')
 <!-- Shift Overview Banner (Matching Reference Screenshot) -->
 <div class="card-ent mb-4" style="border-left: 4px solid var(--brand-primary); background: #ffffff;">
